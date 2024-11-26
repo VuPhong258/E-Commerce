@@ -1,10 +1,20 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import {
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuItems,
+  Transition,
+} from "@headlessui/react";
 import { logo } from "../assets";
 import { IoClose, IoSearchOutline } from "react-icons/io5";
 import { FiShoppingBag, FiStar, FiUser } from "react-icons/fi";
 import Container from "./Container";
 import { FaChevronDown } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import { config } from "../../config";
+import { getData } from "../../lib/index";
+import { CategoryProps } from "../../type";
 
 const bottomNavigation = [
   { title: "Home", link: "/" },
@@ -17,7 +27,20 @@ const bottomNavigation = [
 
 const Header = () => {
   const [searchText, setsearchText] = useState("");
+  const [categories, setCategories] = useState([]);
 
+  useEffect(() => {
+    const fecthData = async () => {
+      const endpoint = `${config?.baseUrl}/categories`;
+      try {
+        const data = await getData(endpoint);
+        setCategories(data);
+      } catch (error) {
+        console.log("Error fetching data", error);
+      }
+    };
+    fecthData();
+  }, []);
   return (
     <div className="w-full bg-whiteText">
       <div className="max-w-screen-xl mx-auto h-20 flex items-center justify-between px-4 lg:px-0">
@@ -51,7 +74,7 @@ const Header = () => {
           <Link to={"/profile"}>
             <FiUser className="hover:text-skyText duration-200 cursor-pointer" />
           </Link>
-          <Link to={'/favorite'} className="relative block">
+          <Link to={"/favorite"} className="relative block">
             <FiStar className="hover:text-skyText duration-200 cursor-pointer" />
             <span
               className="inline-flex items-center justify-center bg-redText text-whiteText 
@@ -60,7 +83,7 @@ const Header = () => {
               0
             </span>
           </Link>
-          <Link to={'/cart'} className="relative block">
+          <Link to={"/cart"} className="relative block">
             <FiShoppingBag className="hover:text-skyText duration-200 cursor-pointer" />
             <span
               className="inline-flex items-center justify-center bg-redText text-whiteText 
@@ -73,9 +96,41 @@ const Header = () => {
       </div>
       <div className="w-full bg-darkText text-whiteText">
         <Container className="py-2 max-w-4xl flex items-center gap-5 justify-between">
-          <p className="flex items-center gap-1">
-            Select Category <FaChevronDown />{" "}
-          </p>
+          <Menu>
+            <MenuButton
+              className="inline-flex items-center gap-2 rounded-md border border-gray-400 hover:border-white py-1.5
+            px-3 font-semibold text-gray-300 hover:text-whiteText"
+            >
+              Select Category <FaChevronDown className="text-base mt-1 " />{" "}
+            </MenuButton>
+            <Transition
+              enter="transition ease-out duration-75"
+              enterFrom="opacity-0 scale-95"
+              enterTo="opacity-100 scale-100"
+              leave="transition ease-in duration-100"
+              leaveFrom="opacity-100 scale-100"
+              leaveTo="opacity-0 scale-95"
+            >
+              <MenuItems anchor="bottom end" className="w-52 origin-top-right rounded-xl border border-white/5
+              bg-black p-1 text-sm/6 text-gray-300 [--anchor-gap:var(--spacing-1)] focus:outline-none hover:text-white z-50">
+                
+                {categories.map((item: CategoryProps) => (
+                  <MenuItem key={item?._id}>
+                    <Link to={`/category/${item?._base}`}
+                    className="flex w-full items-center gap-2 rounded-lg py-2 px-3 data-[focus]:bg-white/20 tracking-wide"
+                    >
+                      <img
+                        src={item?.image}
+                        alt={item?.name}
+                        className="w-6 h-6 rounded-md"
+                      />
+                      {item?.name}
+                    </Link>
+                  </MenuItem>
+                ))}
+              </MenuItems>
+            </Transition>
+          </Menu>
           {bottomNavigation.map(({ title, link }) => (
             <Link
               to={link}
