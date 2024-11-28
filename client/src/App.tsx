@@ -1,12 +1,14 @@
-import Container from "./ui/Container" 
+import BannerCategories from "./ui/BannerCategories"
+// import Carousel from 'react-multi-carousel';
+import 'react-multi-carousel/lib/styles.css';
+import HomeBanner from "./ui/HomeBanner";
 
 function App() {
 
   return (
    <main>
-    <Container >
-      <p>Hello các bạn</p>
-    </Container>
+    <BannerCategories />
+    <HomeBanner />
    </main>
   )
 }
