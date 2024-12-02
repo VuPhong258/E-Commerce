@@ -2,6 +2,8 @@ import BannerCategories from "./ui/BannerCategories"
 // import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
 import HomeBanner from "./ui/HomeBanner";
+import Hightlights from "./ui/Highlights";
+import Categories from "./ui/Categories";
 
 function App() {
 
@@ -9,6 +11,8 @@ function App() {
    <main>
     <BannerCategories />
     <HomeBanner />
+    <Hightlights />
+    <Categories />
    </main>
   )
 }

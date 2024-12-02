@@ -1,7 +1,6 @@
-import React from 'react'
 import { HiArrowRight } from 'react-icons/hi2'
 
-const CustomRightArrow = ({onClick} : any) => {
+const CustomRightArrow = ({onClick} :any) => {
   return (
     <button
       onClick={onClick}
